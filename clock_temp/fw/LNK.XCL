@@ -1,0 +1,10 @@
+-ca90
+-Z(CODE)INTVEC=0-1B
+-Z(CODE)RCODE,CDATA0,CDATA1,CCSTR,SWITCH,FLASH,CODE=1C-7FF
+-Z(DATA)IDATA0,UDATA0,IDATA1,UDATA1,ECSTR,CSTACK+20,RSTACK+20=60-df
+-e_small_write=_formatted_write
+-e_small_write_P=_formatted_write_P
+-e_medium_read=_formatted_read
+-e_medium_read_P=_formatted_read_P
+-w29
+cl0t

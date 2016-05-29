@@ -1,0 +1,9 @@
+#!/bin/bash
+set -v
+CC='/home/lz/olimex/gcc-4.3.3/usr/bin/arm-linux-uclibcgnueabi-gcc -I/home/lz/olimex/gcc-4.3.3/usr/include -I/home/lz/olimex/gcc-4.3.3/include --sysroot=/home/lz/olimex/gcc-4.3.3/ -isysroot /home/lz/olimex/gcc-4.3.3 -mtune=arm9tdmi -march=armv4t -mabi=aapcs-linux -msoft-float -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64'
+
+#CC='/home/lz/olimex/gcc-4.3.3/usr/bin/arm-linux-uclibcgnueabi-gcc'
+#CC='gcc'
+
+$CC term.c -o term
+

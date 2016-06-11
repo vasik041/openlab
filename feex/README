@@ -1,0 +1,11 @@
+Free Energy Experimentator board
+
+based on ATmega88
+
+- regulated power supply 10..35v with power measurements circuits
+- pulse generator
+- regulated electronic load with power measurements circuits
+
+extras: Java host and com port via ethernet software
+
+

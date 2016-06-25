@@ -1,0 +1,4 @@
+Arbitary shape signal generator
+
+based on 12 bit DAC connected to ATmega88
++ host software (in java)

@@ -1,0 +1,6 @@
+Resistance bank
+
+R = 1..4095 ohm adjusted with rotary encoder
+
+based on ATtiny26 with 2x16 chars LCD display
+

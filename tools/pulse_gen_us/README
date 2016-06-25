@@ -1,0 +1,7 @@
+Pulse generator
+
+pulse length 1..20us step 0.5us
+period 10..120us
+
+based on ATtiny26 with 2x16 chars LCD display
+

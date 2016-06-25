@@ -1,0 +1,7 @@
+Capacitor bank
+
+C = 0.1-8uF adjusted with rotary encoder
+nice tool for resonance tuning
+
+based on ATtiny26 with 2x16 chars LCD display
+

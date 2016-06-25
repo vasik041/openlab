@@ -1,0 +1,8 @@
+Pulse generator
+
+time scales: 15.6,31.2,62.4,125,250,500ns, 1,2,4,8,16,32,64,128,256us
+pulse length and period 1..255 of time scale
+
+
+based on ATtiny26 with 2x16 chars LCD display
+

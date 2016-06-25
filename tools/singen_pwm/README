@@ -1,0 +1,7 @@
+Sin wave generator
+
+frequency 50..550hz
+step 0.5hz
+
+based on ATtiny26 with 2x16 chars LCD display
+

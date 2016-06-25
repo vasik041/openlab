@@ -1,0 +1,8 @@
+Sin wave generator
+
+frequency 1hz..50Khz
+step 0.1hz
+output 0..10v
+
+based on ATmega32 with 2x16 chars LCD display
+

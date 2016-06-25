@@ -1,17 +1,17 @@
 /****************************************************************************/
 /*
- * Osc
- * LZs,2009,2015
+ * HF Gen AD9850 based
  * This is free and unencumbered software released into the public domain.
+ * LZs,2013
  */
 /****************************************************************************/
 
 /* CPU frequency */
-#define F_CPU 16000000UL
+#define F_CPU	1000000UL
+
+#define F_MIN	30000
+#define F_MAX	30000000
+
+#define	STEP_MAX 1000000
 
 /*=========================================================================*/
-
-#define	NELEM(X)	(sizeof(X)/sizeof(X[0]))
-
-#define LED0		sbi(PORTB,4)
-#define LED1		cbi(PORTB,4)

@@ -1,0 +1,8 @@
+High frequency generator
+
+frequency output 100Khz...30Mhz
+
+based on AD8950 module
+controlled by ATtiny861
+
+

@@ -2,6 +2,7 @@
 /*
  * Osc
  * LZs,2009,2015
+ * This is free and unencumbered software released into the public domain.
  */
 /****************************************************************************/
 

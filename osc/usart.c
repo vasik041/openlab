@@ -1,7 +1,8 @@
 /*=========================================================================*/
 /*
  * Serial communication API
- * (c) LZ,2009-2015
+ * LZ,2009-2015
+ * This is free and unencumbered software released into the public domain.
  */
 /*=========================================================================*/
 

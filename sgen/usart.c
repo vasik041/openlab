@@ -1,8 +1,8 @@
 /*=========================================================================*/
 //
 // Serial comunication API
-// This is free and unencumbered software released into the public domain.
 // LZ,2014
+// This is free and unencumbered software released into the public domain.
 //
 /*=========================================================================*/
 

@@ -1,0 +1,6 @@
+Clock & Dual Digital Thermometer
+
+ds1307 RTC, 2x ds1820 temp. sensors
+
+and ATmega32 with 128 x 64 graphic LCD
+

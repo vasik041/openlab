@@ -2,6 +2,7 @@
 /*
  * sin/cos PWM gen
  * LZs,2010-2014
+ * This is free and unencumbered software released into the public domain.
  */
 /*=========================================================================*/
 

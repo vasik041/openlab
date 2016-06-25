@@ -1,8 +1,8 @@
 /*=========================================================================*/
 /*
  * Reading ds1820
- * This is free and unencumbered software released into the public domain.
  * LZs,2009
+ * This is free and unencumbered software released into the public domain.
  */
 /*=========================================================================*/
 

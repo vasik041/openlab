@@ -2,6 +2,7 @@
 /*
  * Sin/cos gen
  * LZs,2010
+ * This is free and unencumbered software released into the public domain.
  */
 /****************************************************************************/
 

@@ -1,8 +1,8 @@
 /*=========================================================================*/
 /*
  * 2 x 16 LCD driver
- * This is free and unencumbered software released into the public domain.
  * LZs,2000
+ * This is free and unencumbered software released into the public domain.
  */
 /*=========================================================================*/
 

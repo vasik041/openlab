@@ -1,8 +1,8 @@
 /*=========================================================================*/
 /*
  * 9600 baud tx @ 1 MHz  (8-2-none)
- * This is free and unencumbered software released into the public domain.
  * LZs,2002
+ * This is free and unencumbered software released into the public domain.
  */
 /*=========================================================================*/
 

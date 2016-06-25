@@ -1,8 +1,8 @@
 /*=========================================================================*/
 /*
  * Software serial port emulation
- * This is free and unencumbered software released into the public domain.
  * LZ,2002
+ * This is free and unencumbered software released into the public domain.
  */
 /*=========================================================================*/
 

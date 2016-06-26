@@ -1,0 +1,36 @@
+
+.macro	ldee	@0
+	ldi	r17,@0
+	ldi	r18,0
+	rcall	eeprom_read
+	.endm
+
+
+.macro	wree	@0,@1
+	ldi	r17,@0
+	ldi	r18,0
+	mov	r19,@1
+	rcall	eeprom_write
+	.endm
+
+eeprom_read:
+	sbic	EECR,EEPE	; Wait for completion of previous write
+	rjmp	EEPROM_read
+	out	EEARH, r18	; Set up address (r18:r17) in address register
+	out	EEARL, r17
+	sbi	EECR,EERE	; Start eeprom read by writing EERE
+	in	r16,EEDR	; Read data from data register
+	ret
+
+
+eeprom_write:
+	sbic	EECR,EEPE	; Wait for completion of previous write
+	rjmp	EEPROM_write
+	ldi	r16, (0<<EEPM1)|(0<<EEPM0) ; Set Programming mode
+	out	EECR, r16
+	out	EEARH, r18	; Set up address (r18:r17) in address register
+	out	EEARL, r17
+	out	EEDR, r19	; Write data (r19) to data register
+	sbi	EECR,EEMPE	; Write logical one to EEMPE
+	sbi	EECR,EEPE	; Start eeprom write by setting EEPE
+	ret

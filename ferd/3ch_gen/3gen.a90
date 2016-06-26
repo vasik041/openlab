@@ -1,0 +1,377 @@
+
+	.nolist
+	.include "tn26def.inc"
+	.list
+
+;----------------------------------------------------------------------------
+
+.macro	outp
+	ldi	r16,@1
+	out	@0,r16
+	.endm
+
+.macro	stm
+	ldi	zl,low(@0)
+	ldi	zh,high(@0)
+	ldi	r16,@1
+	st	z,r16
+	.endm
+
+.macro	ldm
+	ldi	zl,low(@0)
+	ldi	zh,high(@0)
+	ld	r16,z
+	.endm
+
+.macro	jb
+	sbic	@0,@1
+	rjmp	@2
+	.endm
+
+.macro	jnb
+	sbis	@0,@1
+	rjmp	@2
+	.endm
+
+;----------------------------------------------------------------------------
+
+.equ dly0 = 0xf0  ;1
+.equ dly1 = 0xf1  ;1
+.equ dly2 = 0xf2  ;1
+.def freq = r1
+
+.equ mode = 0xf4  ;1
+
+.equ sign=0xf5	;1
+.equ sign1=0xf6	;1
+.equ sign2=0xf7	;1
+.equ sign3=0xf8	;1
+
+.equ pat=0x100	;100-1ff
+
+;----------------------------------------------------------------------------
+
+	.org 0
+	rjmp reset
+	rjmp reset
+	rjmp pcint
+
+	.org 0x40
+
+reset:
+	clr	r0
+	out	PORTA,r0
+
+	outp	SPH,high(RAMEND)
+	outp	SPL,low(RAMEND)
+
+	outp	DDRA,0x07	;out
+	outp	DDRB,0x18	;leds
+
+;------------------------------------------------------------------------------
+
+	rcall	wdt_off
+	rcall	set_mode
+	outp	GIMSK,0x20	;PCIE1
+	outp	PCMSK0,0
+	outp	PCMSK1,0x60	;pb5,6 = pcint13,14
+	sei
+
+;------------------------------------------------------------------------------
+;gen loop
+	ldi	yh,high(pat)
+	ldi	yl,low(pat)
+
+loop:
+	ld	r0,y
+	out	PORTA,r0
+	inc	yl
+
+delay:
+	mov	r20,freq
+lp0:
+	dec	r20
+	brne	lp0
+
+	rjmp	loop
+
+;------------------------------------------------------------------------------
+
+set_mode:
+	ldi	zl,low(mode)
+	ldi	zh,high(mode)
+	ld	r16,z
+	andi	r16,0xfc
+	brne	init
+
+	rcall	check_sign
+	tst	r16
+	breq	mode_ok
+
+; reset all values
+init:
+	stm	mode,0
+	rcall	set_led
+	rcall	set_sign
+
+	rcall	load
+	ldm	dly0
+	cpi	r16,0xff
+	brne	ini0
+
+	stm	dly0,1
+	stm	dly1,1
+	stm	dly2,1
+	ldi	r16,5
+	mov	freq,r16
+ini0:
+	rcall	fill_pat
+	ret
+
+; increment sel
+mode_ok:
+	ldm	mode
+	inc	r16
+	andi	r16,3
+	st	z,r16
+	rcall	set_led
+	rcall	save
+	ret
+
+;------------------------------------------------------------------------------
+
+set_led:
+	cpi	r16,0
+	breq	led0
+	cpi	r16,1
+	breq	led1
+	cpi	r16,2
+	breq	led2
+	cpi	r16,3
+	breq	led3
+	ret
+led0:
+	sbi	PORTB,3
+	sbi	PORTB,4
+	ret
+led1:
+	cbi	PORTB,3
+	sbi	PORTB,4
+	ret
+led2:
+	sbi	PORTB,3
+	cbi	PORTB,4
+	ret
+led3:
+	cbi	PORTB,3
+	cbi	PORTB,4
+	ret
+
+;------------------------------------------------------------------------------
+; set gen parameters
+fill_pat:
+	clr	r0
+	out	PORTA,r0
+
+	rcall	fill0
+
+	ldi	xh,high(pat)
+	ldi	xl,low(pat)
+
+	ldm	dly0
+	ldi	r17,1
+	rcall	fill1
+
+	ldm	dly1
+	ldi	r17,2
+	rcall	fill1
+
+	ldm	dly2
+	ldi	r17,4
+	rcall	fill1
+
+	ret
+
+;------------------------------------------------------------------------------
+;fill 1s r16 bytes, r17 mask
+
+fill1:
+f01:
+	ld	r18,x
+	or	r18,r17
+	st	x,r18
+	inc	xl
+	cpi	xl,0xff
+	breq	f02
+	dec	r16
+	brne	f01
+f02:
+	ret
+
+;------------------------------------------------------------------------------
+;fill all with 0s
+
+fill0:
+	ldi	zh,high(pat)
+	ldi	zl,low(pat)
+	ldi	r16,0
+f00:
+	st	z+,r16
+	tst	zl
+	brne	f00
+	ret
+
+;------------------------------------------------------------------------------
+; pcint13,14 = pinb 5,6
+
+pcint:
+	ldm	mode
+	cpi	r16,3
+	breq	adj_freq
+
+	jnb	PINB,5,plus
+	jnb	PINB,6,minus
+	reti
+
+minus:
+	ldm	mode
+	ldi	zh,high(dly0)
+	ldi	zl,low(dly0)
+	add	zl,r16
+
+	ld	r16,z
+	cpi	r16,1
+	breq	mi00
+	dec	r16
+	st	z,r16
+	rcall	fill_pat
+mi00:
+	reti
+
+plus:
+	ldm	mode
+	ldi	zh,high(dly0)
+	ldi	zl,low(dly0)
+	add	zl,r16
+
+	ld	r16,z
+	cpi	r16,0xf0
+	breq	pl00
+	inc	r16
+	st	z,r16
+	rcall	fill_pat
+pl00:
+	reti
+
+;------------------------------------------------------------------------------
+; freq control
+adj_freq:
+	jnb	PINB,5,fqplus
+	jnb	PINB,6,fqminus
+	reti
+	
+fqminus:
+	dec	freq
+	reti
+
+fqplus:
+	inc	freq
+	reti
+
+;------------------------------------------------------------------------------
+
+set_osccal:
+	in	r17,OSCCAL
+	andi	r17,0x80
+	or	r17,r16
+	out	OSCCAL,r17
+	ret
+
+;------------------------------------------------------------------------------
+;witch WDT off
+
+wdt_off:
+	wdr
+	ldi	r16, (0<<WDRF)	; Clear WDRF in MCUSR
+	out	MCUSR, r16
+	in	r16, WDTCR	; Write logical one to WDCE and WDE
+	ori	r16, (1<<WDCE)|(1<<WDE)	; Keep old prescaler setting
+	out	WDTCR, r16	; to prevent unintentional Watchdog Reset
+	ldi	r16, (0<<WDE)	; Turn off WDT
+	out	WDTCR, r16
+	ret
+
+;------------------------------------------------------------------------------
+
+set_sign:
+	stm	sign,12
+	stm	sign1,34
+	stm	sign2,56
+	stm	sign3,78
+	ret
+
+;------------------------------------------------------------------------------
+
+check_sign:
+	ldm	sign
+	cpi	r16,12
+	brne	csg001
+
+	ldm	sign1
+	cpi	r16,34
+	brne	csg001
+
+	ldm	sign2
+	cpi	r16,56
+	brne	csg001
+
+	ldm	sign3
+	cpi	r16,78
+	brne	csg001
+
+	clr	r16	;ok
+	ret
+
+csg001:
+	ldi	r16,1
+	ret
+
+;------------------------------------------------------------------------------
+
+	.include "ee.a90"
+
+save:
+	ldm	dly0
+	wree	0,r16
+
+	ldm	dly1
+	wree	1,r16
+
+	ldm	dly2
+	wree	2,r16
+
+	wree	3,freq
+	ret
+
+
+load:
+	ldee	0
+	ldi	zh,high(dly0)
+	ldi	zl,low(dly0)
+	st	z,r16
+
+	ldee	1
+	inc	zl
+	st	z,r16
+
+	ldee	2
+	inc	zl
+	st	z,r16
+
+	ldee	3
+	mov	freq,r16
+	ret
+
+;------------------------------------------------------------------------------
+
+

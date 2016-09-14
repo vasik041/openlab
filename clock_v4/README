@@ -1,0 +1,6 @@
+Clock with cooking timer, temperature, humidity and air pressure sensors
+
+using ATtiny861 with 4 x 7 segment led display
+ds3231 and bme280 boards
+
+

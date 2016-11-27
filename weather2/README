@@ -1,0 +1,11 @@
+Custom temperature and humidity monitoring system
+
+1. Temperature sensor based on ATmega328 with 2 x 16 LCD display, 3 DS1821 sensors and RF channel (RF24L01)
+2. Temperature/humidity sensor based on ATtiny861, DHT11 sensor and RF channel (RF24L01)
+3. Logger based ob ATtiny861, ds3231 RTC, RF24L01 receiver connected to
+4.  Olimex board running web server and storing measurements into Sqlite DB.
+
+
+
+
+

@@ -1,0 +1,288 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Weather2</TITLE>
+<META http-equiv="Content-Type" content="text/html; charset=utf-8">
+</HEAD>
+<BODY bgcolor="#E6E6FA" onload="drawLast()">
+<h3 id="mainTitle">Temperature</h3>
+<hr>
+<table cellpadding=10 cellspacing=10 border=0>
+ <tr><td>
+ <table cellpadding=10 cellspacing=10 border=0>
+  <tr><td><a href="javascript:drawToday()">Today</a></td>
+  <tr><td><a href="javascript:drawYesterday()">Yesterday</a></td></tr>
+  <tr><td><a href="javascript:drawThisWeek()">This week</a></td></tr>
+  <tr><td><a href="javascript:drawLastWeek()">Last week</a></td></tr>
+  <tr><td><a href="javascript:drawThisMonth()">This month</a></td></tr>
+  <tr><td><a href="javascript:drawThisYear()">This year</a></td></tr>
+  <tr><td><hr></td></tr>
+  <tr><td>Select sensor:</td></tr>
+  <tr><td>
+    <select id="sensorType">
+	<option value="20">Temperature</option>
+	<option value="21">Battery</option>
+	<option value="0">Temperature 2</option>
+	<option value="1">Humidity 2</option>
+	<option value="2">Battery 2</option>
+    </select> 
+  </td></tr>
+ </table>
+ </td>
+ <td>
+  <canvas id="canvas" width="800" height="600"></canvas></td></tr>
+ </td></tr>
+</table>
+
+<script type="text/javascript">
+
+function drawLast() {
+ var reqDate = null;
+ if (localStorage.getItem('forDate')) {
+     reqDate = localStorage.getItem('forDate');
+ }
+ if(reqDate) draw(reqDate); else drawToday();
+}
+
+
+function drawThisWeek() {
+    Date.prototype.getWeek = function () {
+        var target  = new Date(this.valueOf());
+	var dayNr   = (this.getDay() + 6) % 7;  
+	target.setDate(target.getDate() - dayNr + 3);  
+        var firstThursday = target.valueOf();  
+	target.setMonth(0, 1);  
+	if (target.getDay() != 4) {  
+    	    target.setMonth(0, 1 + ((4 - target.getDay()) + 7) % 7);  
+	}
+	return 1 + Math.ceil((firstThursday - target) / 604800000); // 604800000 = 7 * 24 * 3600 * 1000  
+    }  
+ var d = new Date();
+ var weekNumber = d.getWeek();
+ var year = d.getUTCFullYear();
+ var reqDate = year + "/wk" + weekNumber;
+ draw(reqDate);
+}
+
+
+function drawLastWeek() {
+    Date.prototype.getWeek = function () {
+        var target  = new Date(this.valueOf());
+	var dayNr   = (this.getDay() + 6) % 7;  
+	target.setDate(target.getDate() - dayNr + 3);  
+        var firstThursday = target.valueOf();  
+	target.setMonth(0, 1);  
+	if (target.getDay() != 4) {  
+    	    target.setMonth(0, 1 + ((4 - target.getDay()) + 7) % 7);  
+	}
+	return 1 + Math.ceil((firstThursday - target) / 604800000); // 604800000 = 7 * 24 * 3600 * 1000  
+    }  
+
+ var d = new Date();
+ d.setDate(d.getDate() - 7);
+ var weekNumber = d.getWeek();
+ var year = d.getUTCFullYear();
+ var reqDate = year + "/wk" + weekNumber;
+ draw(reqDate);
+}
+
+
+function drawThisMonth() {
+ var d = new Date();
+ var month = d.getUTCMonth()+1;
+ var year = d.getUTCFullYear();
+ var reqDate = year + "/" + month;
+ draw(reqDate);
+}
+
+
+function drawThisYear() {
+ var d = new Date();
+ var year = d.getUTCFullYear();
+ var reqDate = year;
+ draw(reqDate);
+}
+
+
+function drawYesterday() {
+ var d = new Date();
+ d.setDate(d.getDate() - 1);
+ var month = d.getUTCMonth()+1;
+ var day = d.getUTCDate();
+ var year = d.getUTCFullYear();
+ var reqDate = year + "/" + month + "/" + day;
+ draw(reqDate);
+}
+
+
+function drawToday() {
+ var d = new Date();
+ var month = d.getUTCMonth()+1;
+ var day = d.getUTCDate();
+ var year = d.getUTCFullYear();
+ var reqDate = year + "/" + month + "/" + day;
+ draw(reqDate);
+}
+
+
+function draw(forDate) {
+ var sensor = document.getElementById("sensorType");
+ var title = sensor.options[sensor.selectedIndex].text;
+ document.getElementById('mainTitle').innerHTML = title + " for "+forDate;
+ localStorage.setItem('forDate', forDate);
+
+ var canvas = document.getElementById("canvas");
+ if (null==canvas || !canvas.getContext) return;
+ var ctx=canvas.getContext("2d");
+ var w = canvas.width;
+ var h = canvas.height;
+ ctx.clearRect(0,0,w,h);
+ ctx.beginPath();
+ ctx.strokeStyle = "rgb(128,128,128)"; 
+ if(title.toLowerCase().indexOf("temperature") != -1) {
+    ctx.moveTo(15,h/2); ctx.lineTo(w,h/2);		// X axis
+    ctx.lineTo(w,h/2);  ctx.lineTo(w-10,h/2-4);
+    ctx.lineTo(w,h/2);  ctx.lineTo(w-10,h/2+4);
+ } else {
+    ctx.moveTo(15,h/2+250); ctx.lineTo(w,h/2+250);	// X axis
+    ctx.lineTo(w,h/2+250);  ctx.lineTo(w-10,h/2+250-4);
+    ctx.lineTo(w,h/2+250);  ctx.lineTo(w-10,h/2+250+4);
+ }
+ ctx.moveTo(30,0); ctx.lineTo(30,h);  		// Y axis
+ ctx.lineTo(30,0); ctx.lineTo(30+4,10);
+ ctx.lineTo(30,0); ctx.lineTo(30-4,10);
+
+ ctx.moveTo(27,h/2-50);  ctx.lineTo(33,h/2-50);
+ ctx.moveTo(27,h/2-100); ctx.lineTo(33,h/2-100);
+ ctx.moveTo(27,h/2-150); ctx.lineTo(33,h/2-150);
+ ctx.moveTo(27,h/2-200); ctx.lineTo(33,h/2-200);
+ ctx.moveTo(27,h/2-250); ctx.lineTo(33,h/2-250);
+ ctx.moveTo(27,h/2);     ctx.lineTo(33,h/2);
+ ctx.moveTo(27,h/2+50);  ctx.lineTo(33,h/2+50);
+ ctx.moveTo(27,h/2+100); ctx.lineTo(33,h/2+100);
+ ctx.moveTo(27,h/2+150); ctx.lineTo(33,h/2+150);
+ ctx.moveTo(27,h/2+200); ctx.lineTo(33,h/2+200);
+ ctx.moveTo(27,h/2+250); ctx.lineTo(33,h/2+250);
+
+// Y asis values
+ ctx.font = "16px Arial";
+ if(title.toLowerCase().indexOf("temperature") != -1) {
+    ctx.fillText("10",0,h/2-50+7);
+    ctx.fillText("20",0,h/2-100+7);
+    ctx.fillText("30",0,h/2-150+7);
+    ctx.fillText("40",0,h/2-200+7);
+    ctx.fillText("50",0,h/2-250+7);
+    ctx.fillText("-10",0,h/2+50+7);
+    ctx.fillText("-20",0,h/2+100+7);
+    ctx.fillText("-30",0,h/2+150+7);
+    ctx.fillText("-40",0,h/2+200+7);
+    ctx.fillText("-50",0,h/2+250+7);
+ } else {
+    ctx.fillText("60",0,h/2-50+7);
+    ctx.fillText("70",0,h/2-100+7);
+    ctx.fillText("80",0,h/2-150+7);
+    ctx.fillText("90",0,h/2-200+7);
+    ctx.fillText("100",0,h/2-250+7);
+    ctx.fillText("50",0,h/2+7);
+    ctx.fillText("40",0,h/2+50+7);
+    ctx.fillText("30",0,h/2+100+7);
+    ctx.fillText("20",0,h/2+150+7);
+    ctx.fillText("10",0,h/2+200+7);
+    ctx.fillText("0",0,h/2+250+7);
+ }
+ ctx.stroke();
+
+// horisontal dased lines
+ ctx.beginPath();
+ ctx.setLineDash([1,2]);
+ ctx.moveTo(33,h/2-50);  ctx.lineTo(w-10,h/2-50);
+ ctx.moveTo(33,h/2-100); ctx.lineTo(w-10,h/2-100);
+ ctx.moveTo(33,h/2-150); ctx.lineTo(w-10,h/2-150);
+ ctx.moveTo(33,h/2-200); ctx.lineTo(w-10,h/2-200);
+// if(title.toLowerCase().indexOf("temperature") != -1) {
+  ctx.moveTo(33,h/2-250); ctx.lineTo(w-10,h/2-250);
+// } else {
+  ctx.moveTo(33,h/2);     ctx.lineTo(w-10,h/2); 
+// }
+ ctx.moveTo(33,h/2+50);  ctx.lineTo(w-10,h/2+50);
+ ctx.moveTo(33,h/2+100); ctx.lineTo(w-10,h/2+100);
+ ctx.moveTo(33,h/2+150); ctx.lineTo(w-10,h/2+150);
+ ctx.moveTo(33,h/2+200); ctx.lineTo(w-10,h/2+200);
+ ctx.moveTo(33,h/2+250); ctx.lineTo(w-10,h/2+250);
+ ctx.stroke();
+ ctx.setLineDash([0]);
+
+ GetTemperatureInfo(forDate);
+}
+
+
+var xmlHttp = null;
+
+function GetTemperatureInfo(forDate)
+{
+    var sensorID = document.getElementById("sensorType").value;
+    var Url = "sen/"+sensorID+"/"+forDate;
+
+    xmlHttp = new XMLHttpRequest(); 
+    xmlHttp.onreadystatechange = ProcessRequest;
+    xmlHttp.open( "GET", Url, true );
+    xmlHttp.send( null );
+}
+
+
+function ProcessRequest() 
+{
+    if ( xmlHttp.readyState == 4 && xmlHttp.status == 200 ) 
+    {
+	var info = eval ( "(" + xmlHttp.responseText + ")" );
+
+	var canvas = document.getElementById("canvas");
+	if (null==canvas || !canvas.getContext) return;
+
+	var ctx=canvas.getContext("2d");
+        var w = canvas.width;
+	var h = canvas.height;
+	var step = (w-30) / info.tempData.length;
+
+	var hA = h-50;
+	var kV = 5;
+	var sensor = document.getElementById("sensorType");
+	var title = sensor.options[sensor.selectedIndex].text;
+	if(title.toLowerCase().indexOf("temperature") != -1) {
+	    hA = h/2;
+	    kV = 5;
+	}
+
+	ctx.beginPath();
+	ctx.font = "12px Arial";
+	if(info.tempData.length == 0) {
+	    ctx.fillText("no data",30+step+5,h/2+12);
+	} else {
+	    for(i=0; i < info.tempData.length; i++) {
+		ctx.fillText(info.tempData[i].name,30+i*step+5,hA+12);
+        	ctx.moveTo(30+i*step, hA-3);
+		ctx.lineTo(30+i*step, hA+3); 
+	    }
+	}
+	ctx.stroke();
+
+	ctx.beginPath();
+	ctx.strokeStyle = "rgb(11,153,11)"; 
+	ctx.lineWidth = 2;
+
+	if(info.tempData.length == 1) {
+        	ctx.moveTo(30+step/2,      hA-info.tempData[0].temp*kV);
+		ctx.lineTo(30+step+step/2, hA-info.tempData[0].temp*kV); 
+	}
+	for(i=0; i < info.tempData.length-1; i++) {
+        	ctx.moveTo(30+i*step+step/2,      hA-info.tempData[i].temp*kV);
+		ctx.lineTo(30+i*step+step+step/2, hA-info.tempData[i+1].temp*kV); 
+        }                    
+	ctx.stroke();
+    }
+}
+
+</script>
+
+</body>
+</html>

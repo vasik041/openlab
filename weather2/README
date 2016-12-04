@@ -4,6 +4,7 @@ Custom temperature and humidity monitoring system
 2. Temperature/humidity sensor based on ATtiny861, DHT11 sensor and RF channel (RF24L01)
 3. Logger based ob ATtiny861, ds3231 RTC, RF24L01 receiver connected to
 4.  Olimex board running web server and storing measurements into Sqlite DB.
+5. simple charge controller for solar panel
 
 
 

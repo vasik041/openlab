@@ -1,0 +1,9 @@
+Core Tracer based on Arduino Due
+
+- pulse generator
+- 2 channel ADC to capture current and integrated voultage
+- some processing and drawing
+
+extras: Java host and com port via ethernet software
+
+

@@ -42,9 +42,11 @@
 uint8_t period;
 uint8_t tau;
 uint8_t n;
+uint8_t mode;
 uint16_t seq;
 
 uint8_t pos;
+uint8_t run;
 
 /*=========================================================================*/
 
@@ -92,12 +94,14 @@ void refresh_view()
 	locxy(0,0);	putt(tau);
 	locxy(8,0);	putt(period);
 	locxy(0,1);	putd3(n,0); putch('p');
+	locxy(4,1); 	if(mode) putch('a'); else putch('m');
 	locxy(8,1);	putfq();
 
 	switch(pos) {
 		case 0: locxy(0,0); break;
 		case 1: locxy(8,0); break;
 		case 2: locxy(0,1); break;
+		case 3: locxy(4,1); break;
 	}
 }
 
@@ -128,10 +132,16 @@ void set_timer()
 
 ISR (TIMER1_CMPB_vect)
 {
-	seq++;
-	seq &= SEQ_MSK;
-	if(seq == n) TCCR1A = 0x01;
-	else if(seq == 0) TCCR1A = 0x31;
+	if(mode || run) {
+	    seq++;
+	    seq &= SEQ_MSK;
+	}
+	if(seq == n) {
+	    TCCR1A = 0x01;
+	    run = 0;
+	} else if(seq == 0) {
+	    TCCR1A = 0x31;
+	}
 }
 
 //=========================================================================
@@ -141,6 +151,7 @@ void save_params()
 	eeprom_write_byte( (uint8_t*) 0, n);
 	eeprom_write_byte( (uint8_t*) 1, period);
 	eeprom_write_byte( (uint8_t*) 2, tau);
+	eeprom_write_byte( (uint8_t*) 3, mode);
 }
 
 
@@ -148,10 +159,14 @@ void load_params()
 {
 	n = eeprom_read_byte((uint8_t*)0);
 	if(n < MIN_N || n > MAX_N) n = DEF_N;
+
 	period = eeprom_read_byte((uint8_t*)1);
 	if(period < MIN_P || period > MAX_P) period = DEF_P;
+
 	tau = eeprom_read_byte((uint8_t*)2);
 	if(tau > MAX_T) tau = DEF_T;
+
+	mode = eeprom_read_byte((uint8_t*)3) & 1;
 }
 
 
@@ -173,6 +188,10 @@ uint8_t f = 0;
 		case 2:
 			if(n > MIN_N) {	n--; f = 1; }
 			break;
+		case 3:
+			mode ^= 1;
+			f = 1;
+			break;
 		default:;
 	}
 	return f;
@@ -192,6 +211,10 @@ uint8_t f = 0;
 		case 2:
 			if(n < MAX_N) { n++; f = 1; }
 			break;
+		case 3:
+			mode ^= 1;
+			f = 1;
+			break;
 		default:;
 	}
 	return f;
@@ -204,11 +227,12 @@ int main(void)
 uint8_t f,c,oc,cnt;
 	DDRA = 0xf8+3;
 	DDRB = 0x38;
-	PORTB |= 8;
+	PORTB |= 8;	//LED
 //	OSCCAL = _OSC_;
 //	_WDR();
 //	WDTCR = 0x0f;
 
+	run = 1;
 	load_params();
 	init_timer1();
 	set_timer();
@@ -218,7 +242,7 @@ uint8_t f,c,oc,cnt;
 
 	ADCSR = 0x87;	// ADC
         ADMUX = 2;
-
+	
 	for(oc=0,cnt=100,f=1,pos=0; ; ) {
 		c = get_key();
 		if(c != oc) {
@@ -227,11 +251,11 @@ uint8_t f,c,oc,cnt;
 				case LEFT:  f = inc();	break;
 
 				case UP:
-					if(++pos > 2) pos = 0;
+					if(++pos > 3) pos = 0;
 					f = 1;
 					break;
 				case DOWN:
-					if(--pos > 2) pos = 2;
+					if(--pos > 3) pos = 3;
 					f = 1;
 					break;
 			}
@@ -241,6 +265,10 @@ uint8_t f,c,oc,cnt;
 			set_timer();
 			f = 0;
 			cnt = 0;
+		}
+
+		if(!mode && (PINB & (1 << TRIG_KEY)) == 0) {
+		    if(!run) run = 1;
 		}
 
 		delay(50);

@@ -53,7 +53,7 @@ MCU_TARGET     = attiny26
 #MCU_TARGET     = attiny861
 OPTIMIZE        = -O2
 
-DEFS           =
+DEFS           = -D__PROG_TYPES_COMPAT__ -Wno-deprecated-declarations
 LIBS           =
 
 # You should not have to change anything below here.
@@ -77,7 +77,7 @@ $(PRG).elf: $(OBJ)
 demo.o: demo.c iocompat.h
 
 clean:
-	rm -rf *.o $(PRG).elf *.eps *.png *.pdf *.bak 
+	rm -rf *.o $(PRG).elf *.eps *.png *.pdf *.bak *.i *.s
 	rm -rf *.lst *.map $(EXTRA_CLEAN_FILES)
 
 lst:  $(PRG).lst

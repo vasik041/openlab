@@ -385,6 +385,13 @@ int i;
 	return -1;
     }
     sz = fread(buf,1,lclsz,f);
+    if(sz <= 0) {
+	printf("\nError reading %s rc=%d",fnm,sz);
+    }
+    fseek(f,0,SEEK_END);
+    if(ftell(f) > lclsz) {
+	printf("\nwarning: %s size %ld > %ld\n",fnm,ftell(f),lclsz);
+    }
     fclose(f);
     return 0;
 }

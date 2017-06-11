@@ -1,0 +1,3 @@
+# tiny861 -> 1mhz RC
+./isp861 -fl 62
+

@@ -1,0 +1,8 @@
+Simple ISP for ATtiny861
+
+based on DLP2232 module
+(using MPSSE mode, see dlp2232m-v15-ds.pdf page 24)
+
+
+
+

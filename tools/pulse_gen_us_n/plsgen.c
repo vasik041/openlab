@@ -24,7 +24,7 @@
 #define	DIV	6	// 0.5us
 
 #define	MIN_T	(1*2)
-#define	MAX_T	(20*2)
+#define	MAX_T	(50*2)
 #define	DEF_T	(1*2)
 
 
@@ -34,10 +34,18 @@
 
 
 #define	MIN_N	1
-#define	MAX_N	50
+#define	MAX_N	150
 #define	DEF_N	20
 
 #define	SEQ_MSK	0xfff
+
+//#define INV_OUT
+
+#ifdef INV_OUT
+#define TIMER_MODE 0x31 //inv
+#else
+#define TIMER_MODE 0x21 //non inv
+#endif
 
 uint8_t period;
 uint8_t tau;
@@ -114,8 +122,7 @@ void init_timer1()
 	while((PLLCSR & (1 << PLOCK)) == 0);
 	PLLCSR |= (1<<PCKE); // Set PLL as PWM clock source 
 
-	TCCR1A = 0x31;  // OC1B, PWM1B
-	// 0x21 non inv
+	TCCR1A = TIMER_MODE;  // 0x21 non inv/ 0x31 inv / OC1B, PWM1B
 
 	TIMSK = 0x20;
 	sei();
@@ -137,10 +144,16 @@ ISR (TIMER1_CMPB_vect)
 	    seq &= SEQ_MSK;
 	}
 	if(seq == n) {
+#ifndef INV_OUT
+	    PORTB &= ~(1 << 3);
+#endif
 	    TCCR1A = 0x01;
 	    run = 0;
 	} else if(seq == 0) {
-	    TCCR1A = 0x31;
+	    TCCR1A = TIMER_MODE;
+#ifndef INV_OUT
+	    PORTB |= (1 << 3);
+#endif
 	}
 }
 
@@ -227,7 +240,12 @@ int main(void)
 uint8_t f,c,oc,cnt;
 	DDRA = 0xf8+3;
 	DDRB = 0x38;
-	PORTB |= 8;	//LED
+#ifdef INV_OUT
+	PORTB |= 8;
+#else
+	PORTB &= ~(1 << 3);
+#endif
+
 //	OSCCAL = _OSC_;
 //	_WDR();
 //	WDTCR = 0x0f;

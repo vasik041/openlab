@@ -1,0 +1,3 @@
+~/mingw-w32/bin/i686-w64-mingw32-g++ bmp2png.cpp lodepng.cpp -o bmp2png.exe -static -static-libgcc -static-libstdc++
+
+

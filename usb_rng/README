@@ -1,0 +1,13 @@
+Real random number generator
+
+inspired by http://www.cryogenius.com/hardware/rng/
+and http://makezine.com/projects/really-really-random-number-generator/
+
+for usb interfacing use code from http://codeandlife.com/2012/01/22/avr-attiny-usb-tutorial-part-1/
+and v usb library https://www.obdev.at/products/vusb/index.html
+
+
+
+
+
+

@@ -1,0 +1,8 @@
+Software Update for Free Energy Experimentator board
+
+use LCM protocol to send data over network
+
+Original LCM code taken from https://lcm-proj.github.io/
+Some small modification made to make work lightweight version together with full Java version.
+
+

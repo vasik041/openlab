@@ -1,9 +1,9 @@
 Pulse generator with Push-pull driver
 
-pulse length 50ns...100ms
+pulse length 50ns...40ms
 step 50ns
 
-based on ATmega328
+based on ATmega88
 
 
 

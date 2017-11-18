@@ -1,7 +1,7 @@
 /****************************************************************************/
 /*
  * Pulse gen using atm88/T1
- * LZs,2012-2014
+ * LZs,2012-2017
  */
 /****************************************************************************/
 
@@ -59,11 +59,11 @@ uint64_t t1 = SCALE_1(tau);
 
 //=========================================================================
 
-prog_uint32_t steps_fq[] = {
-	1,10,100,1000		// us
+const prog_uint32_t steps_fq[] = {
+	1,10,100,1000,10000,100000 // ns
 };
 
-prog_uint32_t steps_dt[] = {
+const prog_uint32_t steps_dt[] = {
 	1,10,100		// 0.1% 1% 10%
 };
 
@@ -111,7 +111,7 @@ uint32_t step;
 	if(sw == 0) {
 		step = pgm_read_dword(&steps_fq[step_fq]);
 		if(drc) {
-			if(tau+step < 1000000) tau += step;
+			if(tau+step < 20000000l) tau += step;	//25hz
 		} else {
 			if(tau > step) tau -= step;
 		}
@@ -134,6 +134,7 @@ uint32_t step;
 }
 
 //=========================================================================
+// print procent 999 = 99.9%
 
 void putp(uint16_t n)
 {
@@ -144,15 +145,32 @@ void putp(uint16_t n)
 }
 
 
+void put_step(uint32_t n)
+{
+    if(n < 1000) {
+	putd(n,4,0);
+    } else {
+	putd(n/1000,3,0);
+	putch('K');
+    }
+}
+
+
 void show()
 {
 	clrscr(1);
 	locx(0);
 	if(sw == 0) {
 		putch('F'); putch(' ');
-		putd(tau,6,1);
-		putch('u'); putch('s');	putch(' ');
-		putd(pgm_read_dword(&steps_fq[step_fq]),4,0);
+		if(tau < 1000000) {
+		    putd(tau,6,0);
+		    putch('n');
+		} else {
+		    putd(tau/1000,6,0);
+		    putch('u');
+		}
+		putch('s');	putch(' ');
+		put_step(pgm_read_dword(&steps_fq[step_fq]));
 	} else if(sw == 1) {
 		putch('D'); putch('1'); putch(' ');
 		putp(duty);
@@ -193,7 +211,7 @@ void load_params()
 	step_dt1 = eeprom_read_byte((uint8_t*)9);
 	step_dt2 = eeprom_read_byte((uint8_t*)10);
 
-	if(tau >= 1000000l) tau = 100000l;
+	if(tau >= 1000000l) tau = 100000l;	//5khz
 	if(tau == 0) tau = 10000l; 
 
 	if(duty == 0) duty=1;

@@ -1,0 +1,13 @@
+Core Tracer based on Arduino Due, version 2
+
+- pulse generator
+- 2 channel ADC to capture current and integrated voltage
+- some processing and drawing
+
+extras: Java host and com port via ethernet software using LCM protocol (https://lcm-proj.github.io)
+
+
+
+
+
+

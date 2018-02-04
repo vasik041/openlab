@@ -1,0 +1,2 @@
+gcc -Wall -g draw.c alsa.c ent.c randtest.c chisq.c -o ngs -lasound -lm `pkg-config --cflags gtk+-2.0` `pkg-config --libs gtk+-2.0`
+

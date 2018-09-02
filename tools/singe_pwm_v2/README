@@ -1,0 +1,8 @@
+Sin wave generator v.2
+
+frequency 50..550hz
+step 0.5hz
+digital volume control (16 levels)
+
+based on ATtiny26 with 2x16 chars LCD display
+

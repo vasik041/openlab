@@ -47,9 +47,12 @@ fn load(fnm: &str, l: bool) -> (Vec<Data<f64>>,f64,f64)
 	let kt = 8.* 62.5 / 1000.;
 	let rs = 0.5;	// ohm
 	let udac = 5.;	// v
+
 //	let kdiv = 11.; // 10k + 1k
-	let kdiv = 6.;  // 10k + 2k
-	let kc = 1000. * rs * (udac/kdiv) / 255.;
+//	let kdiv = 6.;  // 10k + 2k
+	let kdiv = 14./4.;  // 10k + 4k
+
+	let kc = 1000. * (udac/kdiv) / 255. / rs;
 	let u = 100.*14.;	// v
 	let mut dv2 = Vec::new();
 	for d in &dv {
@@ -153,14 +156,21 @@ fn draw_metrics(cr: &Context, nx: i32, ny: i32,sx: f64,sy: f64, l:bool)
 
 fn main()
 {   
-	let l = false;
+	let mut l = false;	// current or inductance
 	let mut series = Vec::new();
 
-	let fnm = env::args().skip(1).next().expect("Missing input file");
+	let mut i = 1;
+	let mut fnm = env::args().skip(i).next().expect("Missing input file");
+	if fnm == "-l" {
+	    l = true;
+	    i += 1;
+	    fnm = env::args().skip(i).next().expect("Missing input file");
+	}
+
  	let (data,mut maxt,mut maxc) = load(&fnm,l);
  	series.push(data);
+	i += 1;
 
-	let mut i = 2;
 	while env::args().len() > i {
 		let fnm2 = env::args().skip(i).next().expect("Missing input file");
  		let (data2,maxt2,maxc2) = load(&fnm2,l);
@@ -173,6 +183,7 @@ fn main()
  		series.push(data2);
  		i += 1;
 	}
+
 
 	let w = 800;
 	let h = 800;
@@ -188,15 +199,20 @@ fn main()
   	
   	let mut sx = 10.;
  	let mut nx = 1 + ((maxt/sx).floor() as i32);  	
-	if nx > 14 {
+//	let mut ki = 0;
+//	let k = vec![ 2.,2.5.,2.,2.5.,50.,100.,200.,500. ];
+	while nx > 14 {
 		sx *= 2.;
+//		ki += 1;
 		nx = 1 + ((maxt/sx).floor() as i32);
 	}
 	
   	let mut sy = 10.;
   	let mut ny = 1 + ((maxc/sy).floor() as i32);
-	if ny > 14 {
+//	ki = 0;
+	while ny > 14 {
 		sy *= 2.;
+//		ki += 1;
 		ny = 1 + ((maxc/sy).floor() as i32);
 	}
 

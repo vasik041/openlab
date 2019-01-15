@@ -1,8 +1,8 @@
 //=========================================================================
 //
 // Keys with ADC
-// This is free and unencumbered software released into the public domain.
 // LZ,2015
+// This is free and unencumbered software released into the public domain.
 //
 //=========================================================================
 
@@ -19,6 +19,7 @@
 #define	KEY_3	3
 #define	KEY_4	4
 
-uint8_t get_key();
+uint16_t get_aval(uint8_t ch);
+uint8_t get_key(void);
 
 

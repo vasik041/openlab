@@ -1,23 +1,31 @@
+/****************************************************************************/
+/*
+ * Uimeter on uiptfg board
+ * This is free and unencumbered software released into the public domain.
+ * LZs,2008,2015
+ */
+/****************************************************************************/
 
-#ifndef TEST_H
-#define TEST_H
+//#define UI12	1	// 12v pwr suply
 
-#define F_CPU 8000000UL
+#ifdef UI12
+	#define	USCALE	20
+#else
+	#define	USCALE	40
+#endif
 
+
+// CPU frequency
+#define F_CPU 1000000UL
+
+#include <inttypes.h>
 #include <avr/io.h>
-#include <util/delay.h>
 #include <avr/interrupt.h>
 #include <avr/sleep.h>
 #include <avr/eeprom.h>
-
-#include <inttypes.h>
 #include <stdint.h>
 #include <compat/ina90.h>
 #include <compat/deprecated.h>
+#include <util/delay.h>
 
-
-#define	LED	0x10
-
-#define	NELEM(X)	(sizeof(X)/sizeof(X[0]))
-
-#endif // TEST_H
+/*=========================================================================*/

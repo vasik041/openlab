@@ -1,0 +1,22 @@
+RTS - boot0 1 flash, 0 isp
+DTR - reset 1 reset, 0 work
+
+keys PB9,8,7,6 -> 8 4 2 1 (22k -> 3.3v)
+
+ili9341 LCD connections
+ 1  vcc(3.3v from 5v thru lm2950-3.3)
+ 2 gnd
+ 3 cs PA0
+ 4 rst PA1
+ 5 dc PA2
+ 6 mosi PA7
+ 7 sck PA5
+ 8 LED thru 20 ohm resistor -> +5v
+ 9 miso PA6
+
+Timer3 outputs (partial remap) PB0,1,4,5 thru 74hc04
+ADC 3,4 inputs PA3,4 + 4x 1n4148 and 1k for protection
+I2C sda PB11, scl PB10 -> 24lc512 + 2x 10k to 3.3v
+
+
+

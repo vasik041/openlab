@@ -1,0 +1,10 @@
+Simple 4 channel pulse generator with possibility capture analog signal
+using stm32f103c8t6 board a.k.a Blue Pill
+
+This was taken as a base
+ https://github.com/electronut/stm32-start
+
+And this used for progremming
+ https://github.com/jsnyder/stm32loader
+
+Thank you everyone for sharing your work!

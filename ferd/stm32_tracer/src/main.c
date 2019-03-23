@@ -1,3 +1,6 @@
+/*
+ * This is free and unencumbered software released into the public domain.
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -51,7 +54,7 @@ static volatile uint16_t period = 1000;
 static volatile uint16_t step = 1;
 static volatile uint16_t timebase = 0;
 
-static volatile uint16_t aval[1000];
+static uint16_t aval[1000];
 
 static const char *tbs[] = {
     "125ns",
@@ -183,10 +186,10 @@ void invif(int pos, int row, uint8_t sw)
 
 void draw(int pos)
 {
-    locXY(8,8);    puts1("ch1       "); invif(pos,0,1); putd(tau1,4,0); invif(pos,0,0);
-    locXY(8,8+16); puts1("ch2       "); invif(pos,1,1); putd(tau2,4,0); invif(pos,1,0);
-    locXY(8,8+32); puts1("ch3       "); invif(pos,2,1); putd(tau3,4,0); invif(pos,2,0);
-    locXY(8,8+48); puts1("ch4       "); invif(pos,3,1); putd(tau4,4,0); invif(pos,3,0);
+    locXY(8,8);    puts1("ch1      "); invif(pos,0,1); putd(tau1,5,0); invif(pos,0,0);
+    locXY(8,8+16); puts1("ch2      "); invif(pos,1,1); putd(tau2,5,0); invif(pos,1,0);
+    locXY(8,8+32); puts1("ch3      "); invif(pos,2,1); putd(tau3,5,0); invif(pos,2,0);
+    locXY(8,8+48); puts1("ch4      "); invif(pos,3,1); putd(tau4,5,0); invif(pos,3,0);
 
     locXY(8,8+64); puts1("period   "); invif(pos,4,1); putd(period,5,0); invif(pos,4,0);
     locXY(8,8+80); puts1("step      "); invif(pos,5,1); putd(step,4,0); invif(pos,5,0);
@@ -204,6 +207,8 @@ void TIM3_IRQHandler(void)
     } 
 }
 */
+
+extern volatile uint32_t status;
 
 int main(int argc, char* argv[])
 {
@@ -287,7 +292,7 @@ int main(int argc, char* argv[])
 	    }
 
 	    if(uart_rcvd(USART1)) {
-		int i;
+		uint16_t i;
 		int c = uart_getc(USART1);
 		if(c == 'r') {
 		    for(i=0; i < 16; i++) {
@@ -314,12 +319,20 @@ int main(int argc, char* argv[])
 		    fillScreen(ILI9341_BLACK);
 		    draw(pos);
 		} else if(c == 'm') {
+		    dma_init(3, aval, NELEM(aval));
+
 		    while(TIM_GetITStatus(TIM3, TIM_IT_CC2) == RESET);
 		    TIM_ClearITPendingBit(TIM3, TIM_IT_CC2);
 		    while(TIM_GetITStatus(TIM3, TIM_IT_CC2) == RESET);
     		    TIM_ClearITPendingBit(TIM3, TIM_IT_CC2);
+
 //		    adc_read_n(3, aval, NELEM(aval));
-		    adc_read_n_dma(3, aval, NELEM(aval));
+//		    adc_read_dma();
+
+		    DMA_ENABLE;
+		    while(status == 0);
+		    DMA_DISABLE;
+
 		    uart_printf("@");
 		    for(i=0; i < NELEM(aval); i++) {
 			uart_printf("%d,%d\r\n",i,aval[i]);

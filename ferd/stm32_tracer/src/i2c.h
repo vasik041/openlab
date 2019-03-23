@@ -1,3 +1,6 @@
+/*
+ * This is free and unencumbered software released into the public domain.
+ */
 
 #define I2C_TIMEOUT_MAX 100000
 

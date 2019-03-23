@@ -1,3 +1,7 @@
+/*
+ * This is free and unencumbered software released into the public domain.
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -98,10 +102,8 @@ void DMA1_Channel1_IRQHandler(void)
 
 
 
-void adc_read_n_dma(uint8_t channel, uint16_t *buf, uint16_t n)
+void dma_init(uint8_t channel, uint16_t *buf, uint16_t n)
 {
-    ADC_RegularChannelConfig(ADC1, channel, 1, ADC_SampleTime_1Cycles5);
-
     RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE);
     DMA_InitTypeDef dmaInitStruct;
     
@@ -129,18 +131,21 @@ void adc_read_n_dma(uint8_t channel, uint16_t *buf, uint16_t n)
     NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0;
     NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
     NVIC_Init(&NVIC_InitStruct);
-    
-    /* Enable DMA channel1 */
-    DMA_Cmd(DMA1_Channel1, ENABLE);
 
+    ADC_RegularChannelConfig(ADC1, channel, 1, ADC_SampleTime_1Cycles5);
     /* Enable ADC1 DMA */
     ADC_DMACmd(ADC1, ENABLE);
-    
     ADC_SoftwareStartConvCmd(ADC1, ENABLE);
     status = 0;
+}
+
+void adc_read_dma()
+{
+    /* Enable DMA channel1 */
+    DMA_Cmd(DMA1_Channel1, ENABLE);
     while(status == 0);
     DMA_Cmd(DMA1_Channel1, DISABLE);
-    DMA_ITConfig(DMA1_Channel1, DMA_IT_TC, DISABLE);
+    status = 0;
 }
 
 

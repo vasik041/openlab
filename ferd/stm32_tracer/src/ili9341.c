@@ -1,3 +1,5 @@
+// ili9341 driver
+// based on Arduino libraries
 
 #include <stdio.h>
 #include <stdlib.h>

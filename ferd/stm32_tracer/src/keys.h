@@ -1,3 +1,6 @@
+/*
+ * This is free and unencumbered software released into the public domain.
+ */
 
 #define	KEY1	8
 #define	KEY2	4

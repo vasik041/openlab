@@ -1,3 +1,5 @@
+// ili9341 driver header
+// based on Arduino libraries
 
 #ifndef _ADAFRUIT_ILI9341H_
 #define _ADAFRUIT_ILI9341H_

@@ -4,7 +4,7 @@ using stm32f103c8t6 board a.k.a Blue Pill
 This was taken as a base
  https://github.com/electronut/stm32-start
 
-And this used for progremming
+And this used for programming
  https://github.com/jsnyder/stm32loader
 
 Thank you everyone for sharing your work!

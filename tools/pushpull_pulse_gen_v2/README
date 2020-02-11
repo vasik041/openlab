@@ -1,0 +1,10 @@
+Pulse generator with Push-pull driver
+
+frequency 10hz .. 1Khz
+step 0.1/1/10hz
+sweep function
+
+based on ATmega88
+
+
+

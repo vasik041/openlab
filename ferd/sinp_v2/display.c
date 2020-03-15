@@ -2,7 +2,6 @@
 /*
  * 2 x 16 LCD driver
  * LZs,2000
- * This is free and unencumbered software released into the public domain.
  */
 /*=========================================================================*/
 
@@ -23,7 +22,7 @@ volatile uint8_t x,y;
  */
 void wx(void)
 {
-	_delay_us(50);
+	_delay_us(10);
 }
 
 /*=========================================================================*/

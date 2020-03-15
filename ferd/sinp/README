@@ -1,0 +1,4 @@
+50..500hz sine signal generator with phase adjusted sync pulse output (ver. 1)
+
+based on 8 bit DAC connected to ATmega32
+

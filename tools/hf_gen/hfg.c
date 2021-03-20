@@ -28,7 +28,7 @@ volatile uint32_t step;
 
 /*=========================================================================*/
 
-void putd(uint32_t n,uint8_t f)
+void putd(uint32_t n, uint8_t f)
 {
 uint32_t m;
 uint8_t i,p;
@@ -49,39 +49,36 @@ uint8_t i,p;
 
 /*=========================================================================*/
 
+const prog_int8_t encoderDirections[] = { 0, -1, 1, 0, 1, 0, 0, -1, -1, 0, 0, 1, 0, 1, -1, 0 };
+
+volatile int8_t drc;
+volatile uint8_t oldEncoderState;
+
+
 ISR (INT0_vect)
 {
-volatile uint8_t w;
-	_CLI();
-	for(w=150; w; w--);
-	if((PINB & 0x40) != 0) { //int0
-		if((PINA & 8) != 0) {
-			if(f_val+step >= F_MAX) return;
-			f_val+=step;
-		} else {
-			if(f_val-step <= F_MIN) return;
-			f_val-=step;
-		}
-	} else {
-		if((PINA & 8) == 0) {
-			if(f_val+step >= F_MAX) return;
-			f_val+=step;
-		} else {
-			if(f_val-step <= F_MIN) return;
-			f_val-=step;
-		}
-	}
-	f = 1;
-	_SEI();
+    oldEncoderState <<= 2;
+    oldEncoderState |= (((PINA & 8) >> 3) + ((PINB & 0x40) >> 5));
+    drc = pgm_read_byte(&encoderDirections[oldEncoderState & 0x0f]);
+    if(drc == 0) return;
+
+    if(drc == -1) {
+        if(f_val + step >= F_MAX) return;
+        f_val += step;
+    } else {
+        if(f_val - step <= F_MIN) return;
+        f_val -= step;
+    }
+    f = 1;
 }
 
 /*=========================================================================*/
 
 void set_val()
 {
-	eeprom_write_dword((uint32_t*)0,f_val);
-	eeprom_write_dword((uint32_t*)4,step);
-	ad9850_wr(0,f_val);
+	eeprom_write_dword((uint32_t*)0, f_val);
+	eeprom_write_dword((uint32_t*)4, step);
+	ad9850_wr(0, f_val);
 }
 
 /*=========================================================================*/
@@ -92,7 +89,7 @@ int main(void)
 	DDRB = 0x32;	// rs, e, reset (out)
 	DIDR0 = 0;	// PA0 as digital i/o
 
-	delay(100);
+	delay(300);
 	ad9850_reset();
 	display_init();
 
@@ -108,13 +105,14 @@ int main(void)
 	step = eeprom_read_dword((uint32_t*)4);
 	if(step == 0) step = 1;
 	if(step > STEP_MAX) step = STEP_MAX;
-	ad9850_wr(0,f_val);
+	ad9850_wr(0, f_val);
 
 	f_val2 = f_val-1;
 	f2 = 0;
 
 	for( ; ; ) {
 		if(f) {
+                        _CLI();
 			clrscr(1);
 			puts1(PSTR("F= "));
 			putd(f_val,0);
@@ -122,20 +120,25 @@ int main(void)
 
 			locxy(0,1);
 			puts1(PSTR("Step= "));
-			putd(step,0);
+			if(step < 1000) putd(step, 0); else { putd(step/1000, 0); puts1(PSTR("K")); }
 			f = 0;
 			f2 = 0;
+                        _SEI();
 		}
 
+                _CLI();
 		if((PINB & 8) == 0) {
-			if(step < STEP_MAX) step*=10; else step = 1;
+			if(step < STEP_MAX) step *= 10; else step = 1;
 			while((PINB & 8) == 0);
 			f = 1;
 		}
+                _SEI();
 
 		delay(500);
 		if(++f2 > 10 && f_val != f_val2) {
+                        _CLI();
 			set_val();
+                        _SEI();
 			f2 = 0;
 			f_val2 = f_val;
 		}
@@ -145,5 +148,4 @@ int main(void)
 }
 
 /*=========================================================================*/
-
 

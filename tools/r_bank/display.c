@@ -69,7 +69,7 @@ void wrs(uint8_t adr,uint8_t d)
 
 /***************************************************************************/
 /*
- *ÿinitialize LCD
+ * Initialize LCD
  */
 
 void display_init(void)

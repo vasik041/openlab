@@ -6,14 +6,13 @@
 //
 //=========================================================================
 
-#define	KEY_UP_AVAL	513
-#define	KEY_DOWN_AVAL	1165
-#define	KEY_LEFT_AVAL	1664
+#define	KEY_UP_AVAL	523
+#define	KEY_DOWN_AVAL	1182
+#define	KEY_LEFT_AVAL	1684
 #define	KEY_RIGHT_AVAL	0
-#define	KEY_SELECT_AVAL	2251
+#define	KEY_SELECT_AVAL	2285
 
-#define	ABS(X)		(((X) >= 0) ? (X) : (-(X)))
-#define	NEAROF(X,Y)	(ABS(X-Y) < 100)
+#define	NEAROF(X,Y)	(X > Y-200 && X < Y+200)
 
 #define	KEY_UP		1
 #define	KEY_DOWN 	2

@@ -1,0 +1,16 @@
+LCD  Due
+ RS  DP8
+ E   DP9
+ DB4 DP4
+ DB5 DP5
+ DB6 DP6
+ DB7 DP7
+
+Timers
+ PB25 digital pin 2   TC0 A0   pulse 0
+ PD7  digital pin 11  TC2 A8   phase
+ PD8  digital pin 12  TC2 B8   pulse 1
+
+EEPROM 24lc512
+ SDA pin 27 PD2 + 22k to 3.3v
+ SCL pin 25 PD0 + 22k to 3.3v

@@ -1,0 +1,13 @@
+Notes:
+ U3 allow perform experiments with low power (supply voltage starting from aprox. 3v)
+ Do not install U3 for high power use.
+ There is error in PCB pins 2 and 3 should be swapped
+ J7 short 1-2 for TC4420 (no inversion), 2-3 for TC4429 (inversion)
+ J3 antenna (for PLL)
+ short J1 for continuous mode
+ short J5 to switch off or apply interrupt signal (1-on, 0-off)
+ short J6 to enable PLL
+ select frequency with C1,C5
+  200pf  800Khz - 1Mhz
+  470pf  300 - 500Khz
+  680pf  200-300Khz

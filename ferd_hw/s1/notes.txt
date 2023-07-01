@@ -1,0 +1,7 @@
+Notes:
+- U10 pin 1 and 7 should be switched as it shown on s1_rev2.pdf
+- recommended add 0.1uF from U1 pin 4 to ground
+- recommended add 1K from U1 pin 3 to ground
+- recommender use 470ohm in series with 10k pot as R17
+
+My current understanding is that Q3,Q5, R11,R14,R15,R16 can be omitted, just supply +15V to D1 anode instead 

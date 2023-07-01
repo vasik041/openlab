@@ -1,0 +1,63 @@
+Partlist
+
+Exported from uiptfg.sch at 24.10.2015 12:21:20
+
+EAGLE Version 5.10.0 Copyright (c) 1988-2010 CadSoft
+
+Part     Value           Device          Package         Library                 Sheet
+
+C1       0,1uF           C-EU050-030X075 C050-030X075    rcl                     1
+C2       0,1uF           C-EU050-030X075 C050-030X075    rcl                     1
+C5       0,1uF           C-EU050-030X075 C050-030X075    rcl                     1
+
+C6       0,1uF           C-EU050-030X075 C050-030X075    rcl                     1
+C7       0,1uF           C-EU050-030X075 C050-030X075    rcl                     1
+C8       0,1uF           C-EU050-030X075 C050-030X075    rcl                     1
+
+C9       0,1uF           C-EU050-030X075 C050-030X075    rcl                     1
+C10      0,1uF           C-EU050-030X075 C050-030X075    rcl                     1
+C12      0,1uF           C-EU050-030X075 C050-030X075    rcl                     1
+C13      0,1uF           C-EU050-030X075 C050-030X075    rcl                     1
+
+C3       100uF           CPOL-EUE2-5     E2-5            rcl                     1
+C4       100uF           CPOL-EUE2-5     E2-5            rcl                     1
+
+D1       1N5819-B        1N5819-B        DO41-7.6        diode                   1
+D2       1N4148DO35-7    1N4148DO35-7    DO35-7          diode                   1
+D3       1N4148DO35-7    1N4148DO35-7    DO35-7          diode                   1
+D4       1N4148DO35-7    1N4148DO35-7    DO35-7          diode                   1
+D5       1N4148DO35-7    1N4148DO35-7    DO35-7          diode                   1
+DS1      BC547           BC547           SOT54A          transistor-small-signal 1
+Q1       BS250           BS250           SOT54E          transistor-small-signal 1
+Q2       BC557           BC557           TO92            transistor-pnp          1
+IC1      TINY26P         TINY26P         DIL20           atmel                   1
+IC2      LP2950Z         LP2950Z         TO92            national-semiconductor  1
+IC3      TL081P          TL081P          DIL08           linear                  1
+
+LED1                     LED3MM          LED3MM          adafruit                1
+LED2                     LED3MM          LED3MM          adafruit                1
+R1       10k             R-EU_0207/10    0207/10         rcl                     1
+R2       68k             R-EU_0207/10    0207/10         rcl                     1
+
+R3       22k             TRIM_EU-B64Y    B64Y            pot                     1
+R4       10k             TRIM_EU-B64Y    B64Y            pot                     1
+R5       5k              TRIM_EU-B64Y    B64Y            pot                     1
+R21      100k            TRIM_EU-B64Y    B64Y            pot                     1
+
+R6       4,7k            R-EU_0207/10    0207/10         rcl                     1
+R7       470             R-EU_0207/10    0207/10         rcl                     1
+R8       470             R-EU_0207/10    0207/10         rcl                     1
+R9       470             R-EU_0207/10    0207/10         rcl                     1
+R10      470             R-EU_0207/10    0207/10         rcl                     1
+R11      51              R-EU_0207/10    0207/10         rcl                     1
+R15      2,2k            R-EU_0207/10    0207/10         rcl                     1
+R16      2,2k            R-EU_0207/10    0207/10         rcl                     1
+R17      0,03            R-EU_0207/10    0207/10         rcl                     1
+R18      100             R-EU_0207/10    0207/10         rcl                     1
+R19      1k              R-EU_0207/10    0207/10         rcl                     1
+R20      1k              R-EU_0207/10    0207/10         rcl                     1
+
+R22      2,2k            R-EU_0207/10    0207/10         rcl                     1
+R23      330             R-EU_0207/10    0207/10         rcl                     1
+R24      680             R-EU_0207/10    0207/10         rcl                     1
+R25      1k              R-EU_0207/10    0207/10         rcl                     1

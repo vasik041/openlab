@@ -1,0 +1,1 @@
+firmware for this board located here ../tools/plsgen88_rev2

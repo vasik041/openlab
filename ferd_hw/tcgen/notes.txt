@@ -1,0 +1,19 @@
+Notes
+
+JP1 - syncronization input e.g. from push-pull
+JP18 - sync. edge selection
+JP2 - output polarity (driver inversion/without inversion)
+RV2 - burst delay
+RV3 - burst duration
+JP3 - sync. out (if needed)
+JP17 - sync. polarity
+RV1 - HF frequency
+RV4 - HF duty factor
+J1 - power supply 12-24v
+J2 - to inductor
+J3 - HV PSU (50-200v)
+D5,6 - 16v zeners (or similar)
+D7 - HER860 or similar
+D8 - some suitable snabber diode
+
+C2,C5,C8,C14 are optional, install only if you need adjust timing

@@ -203,7 +203,12 @@ int main(int argc, char *argv[])
        exit(1);
    }
 
-   scan(argv[1]);
+   std::string folder = argv[1];
+   if(ends_with(folder, "/"))
+   {
+       folder.pop_back();
+   }
+   scan(folder);
 
    // combine all files on one
    std::string cmd = "pdfunite ";
@@ -212,8 +217,8 @@ int main(int argc, char *argv[])
        cmd += pdf;
        cmd += " ";
    }
-   cmd += argv[1];
-   cmd += "/" + base_name(argv[1]) + "_.pdf";
+   cmd += folder;
+   cmd += "/" + base_name(folder) + "_.pdf";
    system(cmd.c_str());
 
    // cleanup

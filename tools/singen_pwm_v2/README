@@ -4,5 +4,5 @@ frequency 50..550hz
 step 0.5hz
 digital volume control (16 levels)
 
-based on ATtiny26 with 2x16 chars LCD display
+based on ATtiny861 with 2x16 chars LCD display
 

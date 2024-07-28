@@ -140,6 +140,10 @@ void gen(const std::string base_path, const std::vector<item>& items)
   indexes.push_back(base_path + "/index.htm");
 }
 
+bool starts_with(const std::string& s, const std::string& word)
+{
+    return s.rfind(word, 0) == 0;
+}
 
 void scan(const std::string& base_path)
 {
@@ -152,7 +156,10 @@ void scan(const std::string& base_path)
         if(entry.is_directory())
         {
             std::cout << " -- folder";
-            folders.push_back(entry.path());
+            if(!starts_with(base_name(entry.path()), "book"))
+            {
+              folders.push_back(entry.path());
+            }
         }
         else if(ends_with(entry.path(), ".JPG") || ends_with(entry.path(), ".jpg") || ends_with(entry.path(), ".png"))
         {
@@ -206,7 +213,7 @@ int main(int argc, char *argv[])
        cmd += " ";
    }
    cmd += argv[1];
-   cmd += "/out.pdf";
+   cmd += "/" + base_name(argv[1]) + "_.pdf";
    system(cmd.c_str());
 
    // cleanup

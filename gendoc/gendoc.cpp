@@ -161,7 +161,7 @@ void scan(const std::string& base_path)
               folders.push_back(entry.path());
             }
         }
-        else if(ends_with(entry.path(), ".JPG") || ends_with(entry.path(), ".jpg") || ends_with(entry.path(), ".png"))
+        else if(ends_with(entry.path(), ".JPG") || ends_with(entry.path(), ".jpg") || ends_with(entry.path(), ".png") || ends_with(entry.path(), ".gif"))
         {
             items.push_back(item(entry.path(), base_name(entry.path()), FILE_TYPE::IMAGE));
             std::cout << " -- image";

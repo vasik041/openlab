@@ -1,0 +1,3 @@
+Digital temperature meter with two DS18B20
+
+based on ATtiny861 with 2x16 chars LCD display

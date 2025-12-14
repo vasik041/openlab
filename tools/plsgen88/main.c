@@ -2,6 +2,7 @@
 /*
  * 2 channel pulse generator
  * LZs,2010-2023
+ * This is free and unencumbered software released into the public domain.
  */
 /*=========================================================================*/
 

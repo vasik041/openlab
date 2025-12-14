@@ -2,6 +2,7 @@
 //
 // Keys with ADC
 // LZs,2015
+// This is free and unencumbered software released into the public domain.
 //
 //=========================================================================
 

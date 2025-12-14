@@ -2,6 +2,7 @@
 //
 // Serial comunication API
 // LZ,2014
+// This is free and unencumbered software released into the public domain.
 //
 /*=========================================================================*/
 
